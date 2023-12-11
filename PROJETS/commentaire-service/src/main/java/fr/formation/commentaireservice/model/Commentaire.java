@@ -5,8 +5,6 @@ import org.hibernate.annotations.UuidGenerator;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,9 +18,14 @@ public class Commentaire {
     @Column(name = "text")
     private String texte;
     
-    private int note;
+    private int noteQualite;
+    private int noteQualitePrix;
+    private int noteFacilite;
 
-    @JoinColumn(name = "produit_id")
-    @ManyToOne
-    private Produit produit;
+    // @JoinColumn(name = "produit_id")
+    // @ManyToOne
+    // private Produit produit;
+
+    @Column(name = "produit_id")
+    private String produitId;
 }

@@ -7,5 +7,7 @@
 			"path": "commentaire-service"
 		}
 	],
-	"settings": {}
+	"settings": {
+		"java.configuration.updateBuildConfiguration": "interactive"
+	}
 }
