@@ -9,6 +9,10 @@
 		{
 			"name": "eureka-server",
 			"path": "eureka-server"
+		},
+		{
+			"name": "bulkhead-tester",
+			"path": "bulkhead-tester"
 		}
 	],
 	"settings": {
