@@ -31,7 +31,8 @@ public class CommentaireApiController {
         Commentaire commentaire = this.repository.findById(id).orElseThrow();
         CommentaireResponse resp = new CommentaireResponse();
         ProduitResponse produit = this.restTemplate
-            .getForObject("http://localhost:8081/api/produit/native/" + commentaire.getProduitId()
+            // .getForObject("http://localhost:8081/api/produit/native/" + commentaire.getProduitId()
+            .getForObject("lb://produit-service/api/produit/native/" + commentaire.getProduitId()
             ,
             ProduitResponse.class
         );
@@ -63,7 +64,8 @@ public class CommentaireApiController {
         // }
         
         ProduitResponse produit = this.restTemplate
-            .getForObject("http://localhost:8081/api/produit/native/" + request.getProduitId()
+            // .getForObject("http://localhost:8081/api/produit/native/" + request.getProduitId()
+            .getForObject("lb://produit-service/api/produit/native/" + request.getProduitId()
             ,
             ProduitResponse.class
         );

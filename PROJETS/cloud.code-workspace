@@ -5,6 +5,10 @@
 		},
 		{
 			"path": "commentaire-service"
+		},
+		{
+			"name": "eureka-server",
+			"path": "eureka-server"
 		}
 	],
 	"settings": {
