@@ -13,6 +13,10 @@
 		{
 			"name": "bulkhead-tester",
 			"path": "bulkhead-tester"
+		},
+		{
+			"name": "query-service",
+			"path": "query-service"
 		}
 	],
 	"settings": {

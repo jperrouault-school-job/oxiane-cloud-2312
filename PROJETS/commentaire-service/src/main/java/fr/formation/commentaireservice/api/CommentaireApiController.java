@@ -2,6 +2,7 @@ package fr.formation.commentaireservice.api;
 
 import org.springframework.beans.BeanUtils;
 import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
+import org.springframework.cloud.stream.function.StreamBridge;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,7 +13,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
+import fr.formation.commentaireservice.command.CreateCommentaireCommand;
 import fr.formation.commentaireservice.model.Commentaire;
+import fr.formation.commentaireservice.model.Commentaire.Etat;
 import fr.formation.commentaireservice.repository.CommentaireRepository;
 import fr.formation.commentaireservice.request.CreateCommentaireRequest;
 import fr.formation.commentaireservice.response.CommentaireResponse;
@@ -27,6 +30,7 @@ public class CommentaireApiController {
     // private final ProduitRepository produitRepository;
     private final RestTemplate restTemplate;
     private final CircuitBreakerFactory circuitBreakerFactory;
+    private final StreamBridge streamBridge;
 
     @GetMapping("/{id}")
     public CommentaireResponse findById(@PathVariable String id) {
@@ -79,22 +83,28 @@ public class CommentaireApiController {
         //     ProduitResponse.class
         // );
 
-        // FIXME !!
-        ProduitResponse produit = this.circuitBreakerFactory.create("produitService").run(
-            () -> this.restTemplate.getForObject("lb://produit-service/api/produit/native/" + request.getProduitId(), ProduitResponse.class)
-            ,
-            t -> ProduitResponse.builder().build()
-        );
+        // ProduitResponse produit = this.circuitBreakerFactory.create("produitService").run(
+        //     () -> this.restTemplate.getForObject("lb://produit-service/api/produit/native/" + request.getProduitId(), ProduitResponse.class)
+        //     ,
+        //     t -> ProduitResponse.builder().build()
+        // );
 
-        if (produit == null || !produit.isNotable()) {
-            throw new RuntimeException();
-        }
+        // if (produit == null || !produit.isNotable()) {
+        //     throw new RuntimeException();
+        // }
         
         Commentaire commentaire = new Commentaire();
 
         BeanUtils.copyProperties(request, commentaire);
+        commentaire.setEtat(Etat.ATTENTE);
 
         this.repository.save(commentaire);
+
+        this.streamBridge.send("commentaire.created", CreateCommentaireCommand.builder()
+            .commentaireId(commentaire.getId())
+            .produitId(commentaire.getProduitId())
+            .build()
+        );
 
         return commentaire.getId();
     }
