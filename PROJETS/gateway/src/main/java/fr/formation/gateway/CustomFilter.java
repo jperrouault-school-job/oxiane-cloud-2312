@@ -13,8 +13,6 @@ public class CustomFilter implements GatewayFilter {
     public Mono<Void> filter(ServerWebExchange exchange, GatewayFilterChain chain) {
         System.out.println("OK");
 
-        chain.filter(exchange);
-
-        return Mono.empty();
+        return chain.filter(exchange);
     }
 }

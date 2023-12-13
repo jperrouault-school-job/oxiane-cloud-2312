@@ -19,7 +19,7 @@ public class GatewayApplication {
             // Vers Query Service
             .route(r ->
                 r   .method(HttpMethod.GET)
-                    // .filters(f -> f.filter(customFilter))
+                    .filters(f -> f.filter(customFilter))
                     .uri("lb://query-service")
             )
 
