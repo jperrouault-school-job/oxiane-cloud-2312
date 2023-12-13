@@ -33,6 +33,8 @@ public class ProduitApiController {
 
     @GetMapping
     public List<ProduitResponse> findAll() {
+        // Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+
         return this.repository.findAll().stream()
             .map(p -> {
                 // int note = (int)this.commentaireRepository.findAllByProduitId(p.getId())
